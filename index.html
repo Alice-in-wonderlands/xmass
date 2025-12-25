@@ -52,7 +52,7 @@
             border: 15px solid white;
             box-shadow: 0 20px 50px rgba(0,0,0,0.3), inset 0 0 100px rgba(0,0,0,0.05);
             position: relative;
-            min-height: 500px;
+            min-height: 520px;
         }
         .postcard-divider {
             position: absolute;
@@ -72,14 +72,13 @@
             margin-bottom: 1.5rem;
             width: 100%;
         }
-        /* Custom scrollbar for better look */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #03241b; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 10px; }
     </style>
 </head>
 
-<body class="bg-christmas-green min-h-screen flex items-center justify-center p-4 md:py-20 overflow-y-auto" onclick="playMusic()">
+<body class="bg-christmas-green min-h-screen flex items-center justify-center p-4 md:py-12 overflow-y-auto" onclick="playMusic()">
     
     <audio id="christmas-music" loop autoplay>
         <source src="song.mp3" type="audio/mpeg">
@@ -136,14 +135,16 @@
             <p class="text-white mt-6 font-festive text-xl text-center">Tap the envelope to break the seal...</p>
         </div>
 
-        <div id="card-stage" class="hidden flex-col pb-10">
+        <div id="card-stage" class="hidden flex-col pb-12">
             <div class="postcard-container rounded-sm flex flex-col md:flex-row p-6 md:p-10 text-stone-800 font-handwriting">
                 <div class="postcard-divider hidden md:block"></div>
+                
                 <div class="w-full md:w-1/2 md:pr-10 flex flex-col">
                     <img id="recipient-photo" src="" class="w-32 h-32 rounded-lg object-cover border-4 border-white shadow-md mb-4 -rotate-3">
                     <div id="ai-intro-text" class="text-christmas-red italic text-sm mb-4 leading-relaxed"></div>
                     <div id="main-message" class="text-lg leading-loose overflow-y-auto max-h-[400px] pr-2 whitespace-pre-line"></div>
                 </div>
+
                 <div class="w-full md:w-1/2 md:pl-10 mt-10 md:mt-0 flex flex-col items-end">
                     <div class="stamp-area mb-12 rotate-3">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Royal_Mail_logo.svg/1024px-Royal_Mail_logo.svg.png" class="w-16 grayscale opacity-70">
@@ -153,24 +154,23 @@
                         <div class="address-line">North Pole, Christmas Lane</div>
                         <div class="address-line">Happiness Street 1225</div>
                     </div>
-                    <div class="mt-auto pt-8">
-                        <button id="outro-button" onclick="loadOutroMessage()" class="bg-christmas-green text-white px-6 py-2 rounded-full text-sm hover:bg-green-800 transition-colors">
-                             Open secret message ✨
+                    
+                    <div class="mt-auto pt-10 w-full text-right">
+                        <button id="outro-button" onclick="loadOutroMessage()" class="bg-christmas-green text-white px-6 py-2 rounded-full text-sm hover:bg-green-800 transition-all shadow-md">
+                             Open Secret Wishes ✨
                         </button>
-                        <p id="ai-outro-message" class="text-sm text-christmas-red mt-4 italic max-w-[250px] text-right"></p>
+                        <p id="ai-outro-message" class="text-base text-christmas-red mt-4 italic font-bold animate-pulse"></p>
                     </div>
                 </div>
             </div>
-            <button onclick="location.reload()" class="mt-8 bg-gold hover:bg-yellow-500 text-christmas-green font-bold px-10 py-4 rounded-full shadow-2xl transition-all transform hover:scale-105 mx-auto block">
+            
+            <button onclick="location.reload()" class="mt-10 bg-gold hover:bg-yellow-500 text-christmas-green font-bold px-10 py-4 rounded-full shadow-2xl transition-all transform hover:scale-105 mx-auto block">
                 SEND ANOTHER LETTER ✉️
             </button>
         </div>
     </div>
 
     <script>
-        const apiKey = ""; 
-        const API_MODEL = 'gemini-1.5-flash';
-
         const recipientNamesMap = { 
             caitlin: 'Caitlin', sophie: 'Sophie', dan: 'Dan', gemma: 'Gemma',
             anya: 'Anya', libby: 'Libby', lizzie: 'Lizzie', ciara: 'Ciara',
@@ -178,18 +178,31 @@
         };
 
         const letterContents = {
-            caitlin: { image: 'WILL1.jpg', message: "Merry Christmas, my dear Caitlin.\n\nI miss you more than I can properly put into words. Even though you’ve gone back home, you’re still incredibly important to me and always will be.\n\nThank you for being such a special part of my life — I carry you with me in my heart. I truly love you, and I wish you nothing but happiness, success, and beautiful things ahead.\n\nAlways thinking of you." },
-            sophie: { image: 'WILL4.jpg', message: "Hi Sophie,\n\nI hope this postcard brings a little white snow and lots of joy to you!" },
-            dan: { image: 'WILL3.jpg', message: "Merry Christmas, Dan!\n\nWishing you a very festive holiday season with your legendary harem of 1,000 wives — hope you manage to keep up.\n\nMay your Christmas be loud, joyful, slightly chaotic, and full of good food and laughs.\n\nHave an amazing holiday and a great New Year ahead!" },
-            gemma: { image: 'WILL2.jpg', message: "Merry Christmas, Gemma.\n\nThank you for always supporting, caring for, and looking out for me over the past year — I’m truly grateful for everything you’ve done.\n\nWishing you a peaceful, happy Christmas filled with laughter, good food, and lovely moments with Simon and, of course, Bruce 🐶\n\nWarmest wishes for the New Year ahead." },
-            anya: { image: 'WILL1.jpg', message: "Dear Anya,\n\nWishing you a radiant Christmas filled with joy and happiness with your family." },
-            libby: { image: 'WILL2.jpg', message: "Hi Libby,\n\nI hope this holiday season brings you many beautiful memories and wonderful surprise gifts!" },
-            lizzie: { image: 'WILL3.jpg', message: "To Lizzie,\n\nWishing you a warm, peaceful Christmas Eve and may you always keep that bright smile on your face!" },
-            ciara: { image: 'WILL4.jpg', message: "Dear Ciara,\n\nHope you have a wonderful holiday and a very exciting start to the New Year!" },
-            harriet: { image: 'WILL1.jpg', message: "Hi Harriet,\n\nWishing you a Christmas as magical as a fairy tale. Thank you for everything!" },
-            hannah: { image: 'WILL2.jpg', message: "Dear Hannah,\n\nThank you for always being by my side. Wishing you a blast of a New Year!" },
-            zach: { image: 'WILL3.jpg', message: "Thank you for all the lessons you’ve shared with me — they genuinely mean more than you know.\n\nI’ll always remember your energy and the positivity you bring wherever you go.\n\nWishing you great success and many exciting things ahead in the New Year." },
-            jordy: { image: 'WILL4.jpg', message: "Hi Jordy,\n\nWishing you a warm Christmas and a New Year full of success and achievements!" }
+            caitlin: { 
+                image: 'WILL1.jpg', 
+                message: "Merry Christmas, my dear Caitlin.\n\nI miss you more than I can properly put into words. Even though you’ve gone back home, you’re still incredibly important to me and always will be.\n\nThank you for being such a special part of my life — I carry you with me in my heart. I truly love you, and I wish you nothing but happiness, success, and beautiful things ahead.\n\nAlways thinking of you.\nAlice" 
+            },
+            dan: { 
+                image: 'WILL3.jpg', 
+                message: "Merry Christmas, Dan!\n\nWishing you a very festive holiday season with your legendary harem of 1,000 wives — hope you manage to keep up.\n\nMay your Christmas be loud, joyful, slightly chaotic, and full of good food and laughs.\n\nHave an amazing holiday and a great New Year ahead!\n\nCheers,\nAlice" 
+            },
+            gemma: { 
+                image: 'WILL2.jpg', 
+                message: "Merry Christmas, Gemma.\n\nThank you for always supporting, caring for, and looking out for me over the past year — I’m truly grateful for everything you’ve done.\n\nWishing you a peaceful, happy Christmas filled with laughter, good food, and lovely moments with Simon and, of course, Bruce 🐶\n\nWarmest wishes for the New Year ahead.\n\nBest,\nAlice" 
+            },
+            zach: { 
+                image: 'WILL3.jpg', 
+                message: "Thank you for all the lessons you’ve shared with me — they genuinely mean more than you know.\n\nI’ll always remember your energy and the positivity you bring wherever you go.\n\nWishing you great success and many exciting things ahead in the New Year.\n\nWarm wishes,\nAlice" 
+            },
+            // Default content for others
+            sophie: { image: 'WILL4.jpg', message: "Hi Sophie,\n\nI hope this postcard brings a little white snow and lots of joy to you!\n\nMerry Christmas,\nAlice" },
+            anya: { image: 'WILL1.jpg', message: "Dear Anya,\n\nWishing you a radiant Christmas filled with joy and happiness with your family.\n\nLove,\nAlice" },
+            libby: { image: 'WILL2.jpg', message: "Hi Libby,\n\nI hope this holiday season brings you many beautiful memories and wonderful surprise gifts!\n\nBest,\nAlice" },
+            lizzie: { image: 'WILL3.jpg', message: "To Lizzie,\n\nWishing you a warm, peaceful Christmas Eve and may you always keep that bright smile on your face!\n\nCheers,\nAlice" },
+            ciara: { image: 'WILL4.jpg', message: "Dear Ciara,\n\nHope you have a wonderful holiday and a very exciting start to the New Year!\n\nWarmly,\nAlice" },
+            harriet: { image: 'WILL1.jpg', message: "Hi Harriet,\n\nWishing you a Christmas as magical as a fairy tale. Thank you for everything!\n\nWith love,\nAlice" },
+            hannah: { image: 'WILL2.jpg', message: "Dear Hannah,\n\nThank you for always being by my side. Wishing you a blast of a New Year!\n\nAlice" },
+            jordy: { image: 'WILL4.jpg', message: "Hi Jordy,\n\nWishing you a warm Christmas and a New Year full of success and achievements!\n\nBest,\nAlice" }
         };
 
         let currentRecipient = "";
@@ -207,8 +220,7 @@
             playMusic();
             document.getElementById('merry-christmas-cover').classList.add('hidden');
             const pwdStage = document.getElementById('password-stage');
-            pwdStage.classList.remove('hidden');
-            pwdStage.classList.add('flex');
+            pwdStage.classList.remove('hidden').classList.add('flex');
         }
 
         function checkPassword() {
@@ -216,9 +228,7 @@
             if (letterContents[val]) {
                 document.getElementById('password-stage').classList.replace('flex', 'hidden');
                 document.getElementById('envelope-recipient-name').innerText = "To: " + recipientNamesMap[val];
-                const envStage = document.getElementById('sealed-envelope-stage');
-                envStage.classList.remove('hidden');
-                envStage.classList.add('flex');
+                document.getElementById('sealed-envelope-stage').classList.remove('hidden').classList.add('flex');
                 currentRecipient = val;
                 loadIntroMessage(recipientNamesMap[val]);
             } else {
@@ -239,23 +249,24 @@
 
         function renderPostcard() {
             const data = letterContents[currentRecipient];
-            document.getElementById('card-stage').classList.remove('hidden');
-            document.getElementById('card-stage').classList.add('flex');
+            document.getElementById('card-stage').classList.remove('hidden').classList.add('flex');
             document.getElementById('recipient-photo').src = data.image;
             document.getElementById('main-message').innerText = data.message;
             document.getElementById('addr-name').innerText = recipientNamesMap[currentRecipient];
         }
 
-        async function loadIntroMessage(name) {
-            document.getElementById('ai-intro-text').innerText = "Warmest regards to " + name + "!";
+        function loadIntroMessage(name) {
+            document.getElementById('ai-intro-text').innerText = "Special delivery for " + name + "...";
         }
 
-        async function loadOutroMessage() {
+        function loadOutroMessage() {
             const btn = document.getElementById('outro-button');
             btn.classList.add('hidden');
-            document.getElementById('ai-outro-message').innerText = "Best wishes, Alice ✨";
+            // This is the new hidden secret wish
+            document.getElementById('ai-outro-message').innerText = "May this Christmas spark a magic in your heart that lasts all through the year! ✨❄️";
         }
 
+        // Snow Animation Logic
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
         let flakes = [];
