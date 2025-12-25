@@ -44,7 +44,7 @@
             min-height: 520px;
         }
         .postcard-divider { position: absolute; left: 50%; top: 10%; bottom: 10%; width: 2px; background: linear-gradient(to bottom, transparent, #8B4513, transparent); opacity: 0.3; }
-        .stamp-area { width: 80px; height: 100px; border: 2px dashed #8B4513; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.5); }
+        .stamp-area { width: 85px; height: 105px; border: 2px dashed #8B4513; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.5); overflow: hidden; }
         .address-line { border-bottom: 1px solid #8B4513; margin-bottom: 1.5rem; width: 100%; }
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 10px; }
@@ -87,7 +87,7 @@
                 <button onclick="checkPassword()" class="w-full py-4 bg-christmas-red text-white font-bold rounded-xl hover:bg-red-700 transition-colors">
                     OPEN GIFT 🎁
                 </button>
-                <p id="error-message" class="text-red-600 mt-4 text-center hidden">Members-only club — no guest passes today!😌</p>
+                <p id="error-message" class="text-red-600 mt-4 text-center hidden italic text-sm">Members-only club — no guest passes today! 😌</p>
             </div>
         </div>
 
@@ -117,8 +117,8 @@
                 </div>
 
                 <div class="w-full md:w-1/2 md:pl-10 mt-10 md:mt-0 flex flex-col items-end">
-                    <div class="stamp-area mb-12 rotate-3">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Royal_Mail_logo.svg/1024px-Royal_Mail_logo.svg.png" class="w-16 grayscale opacity-70">
+                    <div class="stamp-area mb-12 rotate-3 shadow-inner">
+                        <img id="recipient-stamp" src="" class="w-full h-full object-cover">
                     </div>
                     <div class="w-full space-y-8 mt-4">
                         <div class="address-line">To: <span id="addr-name" class="ml-4 text-xl font-bold"></span></div>
@@ -149,18 +149,18 @@
         };
 
         const letterContents = {
-            caitlin: { image: 'cait.jpg', message: "Merry Christmas, my dear Caitlin.\n\nI miss you more than I can properly put into words. Even though you’ve gone back home, you’re still incredibly important to me and always will be.\n\nThank you for being such a special part of my life — I carry you with me in my heart. I truly love you, and I wish you nothing but happiness, success, and beautiful things ahead.\n\nAlways thinking of you.\n\nLove, Alice" },
-            dan: { image: 'WILL3.jpg', message: "Merry Christmas, Dan!\n\nWishing you a very festive holiday season with your legendary harem of 1,000 wives — hope you manage to keep up.\n\nMay your Christmas be loud, joyful, slightly chaotic, and full of good food and laughs.\n\nHave an amazing holiday and a great New Year ahead!\n\nCheers, Alice" },
-            gemma: { image: 'gem.jpg', message: "Merry Christmas, Gemma.\n\nThank you for always supporting, caring for, and looking out for me over the past year — I’m truly grateful for everything you’ve done.\n\nWishing you a peaceful, happy Christmas filled with laughter, good food, and lovely moments with Simon and, of course, Bruce 🐶\n\nWarmest wishes for the New Year ahead.\n\nBest, Alice" },
-            zach: { image: 'WILL3.jpg', message: "Thank you for all the lessons you’ve shared with me — they genuinely mean more than you know.\n\nI’ll always remember your energy and the positivity you bring wherever you go.\n\nWishing you great success and many exciting things ahead in the New Year.\n\nWarm wishes, Alice" },
-            sophie: { image: 'so.jpg', message: "Hi Sophie,\n\nI hope this postcard brings a little white snow and lots of joy to you!\n\nBest, Alice" },
-            anya: { image: 'anya.jpg', message: "Dear Anya,\n\nWishing you a radiant Christmas filled with joy and happiness with your family.\n\nWarmly, Alice" },
-            libby: { image: 'lib.jpg', message: "Hi Libby,\n\nI hope this holiday season brings you many beautiful memories and wonderful surprise gifts!\n\nBest, Alice" },
-            lizzie: { image: 'WILL3.jpg', message: "To Lizzie,\n\nWishing you a warm, peaceful Christmas Eve and may you always keep that bright smile on your face!\n\nCheers, Alice" },
-            ciara: { image: 'cia.jpg', message: "Dear Ciara,\n\nHope you have a wonderful holiday and a very exciting start to the New Year!\n\nWarmly, Alice" },
-            harriet: { image: 'ha.jpg', message: "Hi Harriet,\n\nWishing you a Christmas as magical as a fairy tale. Thank you for everything!\n\nLove, Alice" },
-            hannah: { image: 'WILL2.jpg', message: "Dear Hannah,\n\nThank you for always being by my side. Wishing you a blast of a New Year!\n\nBest, Alice" },
-            jordy: { image: 'jo.jpg', message: "Hi Jordy,\n\nWishing you a warm Christmas and a New Year full of success and achievements!\n\nBest, Alice" }
+            caitlin: { image: 'cait.jpg', stamp: 's1.jpg', message: "Merry Christmas, my dear Caitlin.\n\nI miss you more than I can properly put into words. Even though you’ve gone back home, you’re still incredibly important to me and always will be.\n\nThank you for being such a special part of my life — I carry you with me in my heart. I truly love you, and I wish you nothing but happiness, success, and beautiful things ahead.\n\nAlways thinking of you.\n\nLove, Alice" },
+            dan: { image: 'WILL3.jpg', stamp: 's2.jpg', message: "Merry Christmas, Dan!\n\nWishing you a very festive holiday season with your legendary harem of 1,000 wives — hope you manage to keep up.\n\nMay your Christmas be loud, joyful, slightly chaotic, and full of good food and laughs.\n\nHave an amazing holiday and a great New Year ahead!\n\nCheers, Alice" },
+            gemma: { image: 'gem.jpg', stamp: 's3.jpg', message: "Merry Christmas, Gemma.\n\nThank you for always supporting, caring for, and looking out for me over the past year — I’m truly grateful for everything you’ve done.\n\nWishing you a peaceful, happy Christmas filled with laughter, good food, and lovely moments with Simon and, of course, Bruce 🐶\n\nWarmest wishes for the New Year ahead.\n\nBest, Alice" },
+            zach: { image: 'WILL3.jpg', stamp: 's4.jpg', message: "Thank you for all the lessons you’ve shared with me — they genuinely mean more than you know.\n\nI’ll always remember your energy and the positivity you bring wherever you go.\n\nWishing you great success and many exciting things ahead in the New Year.\n\nWarm wishes, Alice" },
+            sophie: { image: 'so.jpg', stamp: 's5.jpg', message: "Hi Sophie,\n\nI hope this postcard brings a little white snow and lots of joy to you!\n\nBest, Alice" },
+            anya: { image: 'anya.jpg', stamp: 's6.jpg', message: "Dear Anya,\n\nWishing you a radiant Christmas filled with joy and happiness with your family.\n\nWarmly, Alice" },
+            libby: { image: 'lib.jpg', stamp: 's7.jpg', message: "Hi Libby,\n\nI hope this holiday season brings you many beautiful memories and wonderful surprise gifts!\n\nBest, Alice" },
+            lizzie: { image: 'WILL3.jpg', stamp: 's8.jpg', message: "To Lizzie,\n\nWishing you a warm, peaceful Christmas Eve and may you always keep that bright smile on your face!\n\nCheers, Alice" },
+            ciara: { image: 'cia.jpg', stamp: 's9.jpg', message: "Dear Ciara,\n\nHope you have a wonderful holiday and a very exciting start to the New Year!\n\nWarmly, Alice" },
+            harriet: { image: 'ha.jpg', stamp: 's10.jpg', message: "Hi Harriet,\n\nWishing you a Christmas as magical as a fairy tale. Thank you for everything!\n\nLove, Alice" },
+            hannah: { image: 'WILL2.jpg', stamp: 's11.jpg', message: "Dear Hannah,\n\nThank you for always being by my side. Wishing you a blast of a New Year!\n\nBest, Alice" },
+            jordy: { image: 'jo.jpg', stamp: 's12.jpg', message: "Hi Jordy,\n\nWishing you a warm Christmas and a New Year full of success and achievements!\n\nBest, Alice" }
         };
 
         let currentRecipient = "";
@@ -190,7 +190,7 @@
                 currentRecipient = val;
                 document.getElementById('ai-intro-text').innerText = "Special delivery for " + recipientNamesMap[val] + "...";
                 document.getElementById('error-message').classList.add('hidden');
-                inputEl.value = ""; // Xóa tên đã nhập để lần sau nhập mới
+                inputEl.value = ""; 
             } else {
                 document.getElementById('error-message').classList.remove('hidden');
             }
@@ -211,9 +211,10 @@
             const data = letterContents[currentRecipient];
             document.getElementById('card-stage').style.display = 'flex';
             document.getElementById('recipient-photo').src = data.image;
+            document.getElementById('recipient-stamp').src = data.stamp;
             document.getElementById('main-message').innerText = data.message;
             document.getElementById('addr-name').innerText = recipientNamesMap[currentRecipient];
-            // Reset secret message button and text
+            
             document.getElementById('outro-button').style.display = 'inline-block';
             document.getElementById('ai-outro-message').innerText = "";
         }
@@ -224,11 +225,8 @@
         }
 
         function resetToStart() {
-            // Quay về màn hình nhập tên mà không tải lại trang để giữ nhạc
             document.getElementById('card-stage').style.display = 'none';
             document.getElementById('password-stage').style.display = 'flex';
-            
-            // Reset phong bì về trạng thái đóng
             document.getElementById('envelope-flap').style.transform = 'rotateX(0deg)';
             const seal = document.getElementById('envelope-seal');
             seal.style.opacity = '1';
