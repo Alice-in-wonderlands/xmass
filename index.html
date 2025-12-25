@@ -3,585 +3,321 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Long Distance Christmas Postcard with AI</title>
-    <!-- Load Tailwind CSS --><script src="https://cdn.tailwindcss.com"></script>
+    <title>Christmas Postcard for Friends</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Mountains+of+Christmas:wght@400;700&display=swap" rel="stylesheet"> 
     
-    <!-- Homemade Apple Font (Handwriting style) --><link href="https://fonts.googleapis.com/css2?family=Homemade+Apple&display=swap" rel="stylesheet"> 
-    
-    <!-- Configure Tailwind to use Inter font and define custom colors --><script>
+    <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'christmas-red': '#8B0000', // Deep Wine Red
-                        'christmas-green': '#003D1A', // Deep Forest Green
-                        'gold': '#D97706', // Gold/Orange
-                        'snow-white': '#F9FAFB',
-                        'paper-color': '#FFFDD0', // Light Cream/Paper color
-                        'envelope-bg': '#B73E3E', // A slightly lighter red for the main envelope body
-                        'flap-color': '#A62C2C', // A shade for the flap
+                        'christmas-red': '#B22222',
+                        'christmas-green': '#03241b',
+                        'gold': '#D4AF37',
+                        'paper-cream': '#FDF5E6',
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        'handwriting': ['Homemade Apple', 'cursive'],
+                        'festive': ['Mountains of Christmas', 'serif'],
                     },
                     keyframes: {
-                        fadeIn: { '0%': { opacity: '0' }, '100%': { opacity: '1' } },
-                        unfold: { '0%': { transform: 'scaleY(0)' }, '100%': { transform: 'scaleY(1)' } },
-                        flapFold: {
-                            '0%': { transform: 'rotateX(0deg)' },
-                            '100%': { transform: 'rotateX(180deg)' },
-                        }
+                        twinkle: { '0%, 100%': { opacity: 1 }, '50%': { opacity: 0.3 } }
                     },
                     animation: {
-                        fadeIn: 'fadeIn 1.5s ease-out',
-                        unfold: 'unfold 1.2s ease-out',
-                        flapFold: 'flapFold 0.8s forwards ease-in-out',
+                        twinkle: 'twinkle 1.5s infinite ease-in-out',
                     }
                 }
             }
         }
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        
-        .homemade-font { 
-            font-family: 'Homemade Apple', cursive; 
-            font-size: 1.25rem; 
-            line-height: 2.5rem; 
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.05);
+        .light-string {
+            position: absolute;
+            top: 0; left: 0; width: 100%;
+            height: 40px;
+            display: flex; justify-content: space-around;
+            z-index: 60;
+            pointer-events: none;
         }
-        
-        .animate-unfold {
-            transform-origin: top;
-        }
-
-        /* Đảm bảo màn hình mật khẩu phủ kín toàn bộ */
-        #password-stage {
-            z-index: 50; /* Cao hơn tất cả */
-            background-color: var(--tw-colors-christmas-green); /* Màn hình xanh đậm */
+        .light {
+            width: 12px; height: 12px;
+            border-radius: 50%;
+            box-shadow: 0 0 10px white;
         }
 
-        /* ------------------------------------------- */
-        /* Custom CSS for the Realistic Sealed Envelope */
-        /* ------------------------------------------- */
-        .realistic-envelope {
+        .postcard-container {
+            background-color: #FDF5E6;
+            background-image: radial-gradient(#dbd2bc 0.5px, transparent 0.5px);
+            background-size: 10px 10px;
+            border: 15px solid white;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3), inset 0 0 100px rgba(0,0,0,0.05);
             position: relative;
-            width: 100%;
-            max-width: 600px; /* Kích thước cố định cho phong bì */
-            height: 350px;
-            background-color: var(--tw-colors-envelope-bg);
-            border-radius: 15px;
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-            perspective: 1000px; /* Cho hiệu ứng 3D */
-            cursor: pointer;
-            border: 3px solid var(--tw-colors-gold); /* Viền vàng */
-            overflow: hidden; /* Quan trọng để nắp không bị tràn ra ngoài */
+            min-height: 500px;
         }
 
-        .envelope-front-panel {
+        .postcard-divider {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: var(--tw-colors-envelope-bg);
-            border-radius: 15px;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1;
+            left: 50%; top: 10%; bottom: 10%;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, #8B4513, transparent);
+            opacity: 0.3;
         }
 
-        .envelope-flap-real {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .stamp-area {
+            width: 80px; height: 100px;
+            border: 2px dashed #8B4513;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.5);
+        }
+
+        .address-line {
+            border-bottom: 1px solid #8B4513;
+            margin-bottom: 1.5rem;
             width: 100%;
-            height: 50%; /* Nắp che nửa trên */
-            background-color: var(--tw-colors-flap-color);
-            transform-origin: top;
-            transform: rotateX(0deg); /* Ban đầu nắp đóng */
-            transition: transform 0.8s ease-in-out;
-            border-bottom: 2px solid var(--tw-colors-gold);
-            border-radius: 15px 15px 0 0;
-            z-index: 2; /* Cao hơn thân phong bì */
-            backface-visibility: hidden; /* Ngăn mặt sau bị lật */
-            
-            /* Tạo hình dáng nắp thư tam giác */
-            clip-path: polygon(0% 0%, 100% 0%, 50% 100%, 0% 0%);
-            -webkit-clip-path: polygon(0% 0%, 100% 0%, 50% 100%, 0% 0%);
         }
         
-        .envelope-flap-real.opened {
-            transform: rotateX(180deg); /* Lật nắp lên */
-        }
-
-        /* Vùng nội dung bên trong phong bì (sẽ hiện ra khi nắp mở) */
-        .envelope-inner-content {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-color: var(--tw-colors-envelope-bg); /* Hoặc màu giấy bên trong */
-            top: 0;
-            left: 0;
-            border-radius: 15px;
-            padding: 1rem;
-            z-index: 0; /* Nằm dưới nắp */
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        /* ------------------------------------------- */
-        /* Custom CSS for the Decorative Bow (on the letter content) */
-        /* ------------------------------------------- */
-        .christmas-bow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 20; 
-            pointer-events: none; 
-        }
-
-        .bow-knot {
-            width: 30px; height: 30px;
-            background-color: var(--tw-colors-gold);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 15px rgba(255, 255, 0, 0.5);
-        }
-
-        .bow-loop {
-            width: 80px; height: 80px;
-            background-color: var(--tw-colors-christmas-red);
-            border: 4px solid var(--tw-colors-gold);
-            border-radius: 50%;
-            position: absolute;
-            opacity: 0.95;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .loop-left { transform: translate(calc(-50% - 45px), calc(-50% - 15px)) rotate(-25deg); }
-        .loop-right { transform: translate(calc(-50% + 15px), calc(-50% - 15px)) rotate(25deg); }
-
-        .bow-streamer {
-            width: 15px; height: 100px;
-            background-color: var(--tw-colors-christmas-green);
-            position: absolute;
-            top: 50%; left: 50%;
-            transform-origin: top center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .streamer-left { transform: translate(calc(-50% - 10px), calc(-50% + 10px)) rotate(-10deg); clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 50% 100%, 0% 90%); }
-        .streamer-right { transform: translate(calc(-50% + 10px), calc(-50% + 10px)) rotate(10deg); clip-path: polygon(0% 0%, 100% 0%, 100% 90%, 50% 100%, 0% 90%); }
+        #bg-music { display: none; }
     </style>
 </head>
 
-<body class="bg-christmas-green min-h-screen flex items-center justify-center p-4 font-sans overflow-hidden">
+<body class="bg-christmas-green min-h-screen flex items-center justify-center p-4 overflow-hidden">
+    
+    <audio id="christmas-music" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        </audio>
 
-    <!-- CANVAS CHO HIỆU ỨNG TUYẾT RƠI --><canvas id="snow-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
+    <div class="light-string">
+        <div class="light bg-red-500 animate-twinkle"></div>
+        <div class="light bg-yellow-400 animate-twinkle" style="animation-delay: 0.2s"></div>
+        <div class="light bg-blue-500 animate-twinkle" style="animation-delay: 0.4s"></div>
+        <div class="light bg-green-500 animate-twinkle" style="animation-delay: 0.6s"></div>
+        <div class="light bg-red-500 animate-twinkle" style="animation-delay: 0.8s"></div>
+        <div class="light bg-yellow-400 animate-twinkle" style="animation-delay: 1s"></div>
+    </div>
 
-    <!-- Main Application Container --><div id="app-container" class="w-full max-w-4xl min-h-[70vh] flex flex-col items-center justify-center relative z-10 rounded-xl">
+    <canvas id="snow-canvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
 
-        <!-- Stage 1: Merry Christmas Cover Card --><div id="merry-christmas-cover" class="absolute inset-0 bg-christmas-red rounded-xl shadow-2xl flex flex-col items-center justify-center p-8 transition-all duration-500 cursor-pointer hover:scale-[1.01] hover:shadow-gold"
-            onclick="openCover()">
-            <div class="text-snow-white text-5xl md:text-7xl font-black tracking-widest animate-bounce">
-                MERRY XMAS
+    <div id="app-container" class="w-full max-w-5xl relative z-10">
+
+        <div id="merry-christmas-cover" class="bg-christmas-red rounded-3xl shadow-2xl flex flex-col items-center justify-center p-12 transition-all duration-500 cursor-pointer hover:scale-[1.01] border-8 border-gold/30" onclick="openCover()">
+            <div class="text-white text-6xl md:text-8xl font-festive font-bold tracking-tighter animate-pulse text-center">
+                Merry Christmas
             </div>
-            <p class="text-snow-white text-xl mt-4 border-2 border-snow-white p-2 rounded-lg italic">
-                Bưu Thiếp Từ Xa
-            </p>
-            <p class="text-gold text-sm mt-8">Nhấn vào bất cứ đâu để tiếp tục</p>
+            <div class="mt-6 px-6 py-2 bg-gold text-christmas-green font-bold rounded-full transform -rotate-2">
+                FROM ALICE WITH LOVE
+            </div>
+            <p class="text-white/70 mt-12 animate-bounce">Nhấn để nhận thư và nghe nhạc... ❄️</p>
         </div>
 
-        <!-- Stage 2: Password Stage (Full Screen Overlay) --><div id="password-stage" class="absolute inset-0 bg-christmas-green/95 backdrop-blur-sm rounded-xl shadow-2xl hidden flex-col items-center justify-center p-8 z-50 animate-fadeIn">
-            <div class="bg-snow-white p-8 rounded-xl shadow-2xl w-full max-w-sm text-center">
-                <h2 class="text-3xl font-bold text-christmas-red mb-4">Password</h2>
-                <p class="text-sm text-christmas-green mb-6">Who are you?</p>
-                <input type="password" id="password-input" placeholder="Your name...."
-                       class="w-full p-3 border-2 border-gold rounded-lg focus:outline-none focus:ring-2 focus:ring-christmas-red text-center text-lg mb-4"
-                       onkeyup="if(event.key === 'Enter') checkPassword()">
-                
-                <button onclick="checkPassword()"
-                        class="w-full px-8 py-3 text-xl font-bold bg-gold text-white rounded-full shadow-lg transition-all duration-300 hover:scale-[1.02] active:translate-y-1">
-                    Mở Thư
+        <div id="password-stage" class="hidden flex-col items-center justify-center">
+            <div class="bg-white/95 backdrop-blur p-10 rounded-2xl shadow-2xl w-full max-w-sm border-t-8 border-christmas-red">
+                <h2 class="text-3xl font-festive font-bold text-christmas-red text-center mb-6">Xác nhận danh tính</h2>
+                <input type="text" id="password-input" placeholder="Tên của bạn là..." 
+                       class="w-full p-4 border-2 border-gold/30 rounded-xl focus:outline-none focus:border-christmas-red text-center text-lg mb-6">
+                <button onclick="checkPassword()" class="w-full py-4 bg-christmas-red text-white font-bold rounded-xl hover:bg-red-700 transition-colors">
+                    MỞ QUÀ 🎁
                 </button>
-                <p id="error-message" class="text-christmas-red mt-3 hidden">Mật khẩu không đúng. Vui lòng thử lại!</p>
+                <p id="error-message" class="text-red-600 mt-4 text-center hidden">Bạn không có trong danh sách nhận thư rồi!</p>
             </div>
         </div>
 
-        <!-- Stage 3: Sealed Envelope Stage (The personal envelope after login) --><div id="sealed-envelope-stage" class="absolute inset-0 hidden flex-col items-center justify-center p-4 z-40 animate-fadeIn">
-            
-            <div class="realistic-envelope" onclick="openSealedEnvelope()">
-                <!-- Nắp phong bì --><div id="envelope-flap-real" class="envelope-flap-real"></div>
-
-                <!-- Nội dung bên trong phong bì (hiển thị khi nắp mở) --><div class="envelope-inner-content">
-                    <!-- Tem Anh Quốc (UK Stamp) --><div class="absolute top-6 right-6 w-24 h-24 border-4 border-dashed border-gold bg-christmas-red rounded-md flex items-center justify-center text-snow-white text-xs font-bold text-center leading-tight">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Royal_Mail_logo.svg/1024px-Royal_Mail_logo.svg.png" alt="Royal Mail Stamp" class="w-20 h-20 object-contain p-1 invert" 
-                             onerror="this.outerHTML='<div class=\\'text-sm font-bold\\'>UK<br>POST</div>'">
+        <div id="sealed-envelope-stage" class="hidden flex-col items-center justify-center">
+            <div class="relative w-full max-w-md aspect-[4/3] bg-red-800 rounded-lg shadow-[0_30px_60px_rgba(0,0,0,0.5)] border-4 border-gold/20 flex items-center justify-center cursor-pointer overflow-hidden group" onclick="openSealedEnvelope()">
+                <div id="envelope-flap" class="absolute top-0 left-0 w-full h-1/2 bg-red-900 z-20 origin-top transition-transform duration-700" style="clip-path: polygon(0 0, 100% 0, 50% 100%);"></div>
+                <div id="envelope-seal" class="absolute top-1/2 left-1/2 z-30 transition-all duration-700"
+                     style="transform: translate(-50%, -20%);">
+                    <div class="w-20 h-20 bg-gold rounded-full flex items-center justify-center shadow-[0_4px_10px_rgba(0,0,0,0.3)] border-4 border-yellow-600 ring-2 ring-gold ring-offset-2 ring-offset-red-900">
+                        <span class="text-4xl drop-shadow-md">🎄</span>
                     </div>
-
-                    <!-- From Alice --><p class="from-alice absolute top-8 left-8 text-2xl">From Alice</p>
-
-                    <!-- To Recipient --><p id="envelope-recipient-name" class="to-recipient absolute bottom-8 right-8 text-2xl text-gold"></p>
-
-                    <p class="absolute bottom-1/4 left-1/2 -translate-x-1/2 text-gold text-sm font-bold border-t-2 border-dashed border-gold pt-2 homemade-font">
-                        Nhấn vào phong bì để mở
-                    </p>
+                </div>
+                <div class="text-center z-10 mt-44">
+                    <p id="envelope-recipient-name" class="text-gold font-handwriting text-2xl drop-shadow-sm"></p>
                 </div>
             </div>
+            <p class="text-white mt-6 font-festive text-xl">Chạm vào phong bì để xé tem...</p>
         </div>
 
-        <!-- Stage 4: Letter Content Stage (The actual personalized letter) --><div id="card-stage" class="absolute inset-0 bg-paper-color rounded-xl shadow-2xl p-6 md:p-12 hidden flex-col overflow-y-auto z-30"
-            style="border: 8px solid; border-image: linear-gradient(45deg, var(--tw-colors-christmas-red), var(--tw-colors-gold), var(--tw-colors-christmas-green)) 1;">
+        <div id="card-stage" class="hidden flex-col">
+            <div class="postcard-container rounded-sm flex flex-col md:flex-row p-6 md:p-10 text-stone-800 font-handwriting">
+                <div class="absolute top-0 left-0 p-2">🍃🍒</div>
+                <div class="absolute bottom-0 right-0 p-2">🍒🍃</div>
+                <div class="postcard-divider hidden md:block"></div>
 
-            <!-- The Red Bow in the middle of the card --><div class="christmas-bow z-20">
-                <div class="bow-streamer streamer-left"></div>
-                <div class="bow-streamer streamer-right"></div>
-                <div class="bow-loop loop-left"></div>
-                <div class="bow-loop loop-right"></div>
-                <div class="bow-knot"></div>
+                <div class="w-full md:w-1/2 md:pr-10 flex flex-col">
+                    <img id="recipient-photo" src="" class="w-32 h-32 rounded-lg object-cover border-4 border-white shadow-md mb-4 -rotate-3">
+                    <div id="ai-intro-text" class="text-christmas-red italic text-sm mb-4 leading-relaxed"></div>
+                    <div id="main-message" class="text-lg leading-loose overflow-y-auto max-h-[300px] pr-2"></div>
+                </div>
+
+                <div class="w-full md:w-1/2 md:pl-10 mt-10 md:mt-0 flex flex-col items-end">
+                    <div class="stamp-area mb-12 rotate-3">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Royal_Mail_logo.svg/1024px-Royal_Mail_logo.svg.png" class="w-16 grayscale opacity-70">
+                    </div>
+                    <div class="w-full space-y-8 mt-4">
+                        <div class="address-line">To: <span id="addr-name" class="ml-4 text-xl font-bold"></span></div>
+                        <div class="address-line">North Pole, Christmas Lane</div>
+                        <div class="address-line">Happiness Street 1225</div>
+                    </div>
+                    <div class="mt-auto pt-8">
+                        <button id="outro-button" onclick="loadOutroMessage()" class="bg-christmas-green text-white px-6 py-2 rounded-full text-sm hover:bg-green-800 transition-colors">
+                             Mở lời chúc bí mật ✨
+                        </button>
+                        <p id="ai-outro-message" class="text-sm text-christmas-red mt-4 italic max-w-[250px] text-right"></p>
+                    </div>
+                </div>
             </div>
-            
-            <!-- Letter Content will be dynamically inserted here --><div id="personalized-letter" class="text-center w-full max-w-lg mx-auto p-4 md:p-8 bg-paper-color/95 rounded-xl z-10">
-                <!-- Content inserted by JavaScript --></div>
+            <button onclick="location.reload()" class="mt-8 text-white/50 hover:text-white mx-auto underline">Gửi thư khác</button>
         </div>
     </div>
 
     <script>
-        // --- FIREBASE/API CONFIG ---
-        const apiKey = ""; // <--- ĐẶT API KEY CỦA BẠN VÀO ĐÂY !!!
-        const API_MODEL = 'gemini-2.5-flash-preview-09-2025';
+        const apiKey = ""; // <--- DÁN API KEY VÀO ĐÂY NẾU MUỐN DÙNG AI
+        const API_MODEL = 'gemini-1.5-flash';
 
-        // --- DOM Elements ---
-        const coverStage = document.getElementById('merry-christmas-cover');
-        const passwordStage = document.getElementById('password-stage');
-        const sealedEnvelopeStage = document.getElementById('sealed-envelope-stage');
-        const envelopeFlapReal = document.getElementById('envelope-flap-real');
-        const cardStage = document.getElementById('card-stage');
-        const passwordInput = document.getElementById('password-input');
-        const errorMessage = document.getElementById('error-message');
-        const personalizedLetter = document.getElementById('personalized-letter');
-        const envelopeRecipientName = document.getElementById('envelope-recipient-name');
-        const bow = document.querySelector('.christmas-bow');
+        const recipientNamesMap = { 
+            caitlin: 'Caitlin', sophie: 'Sophie', dan: 'Dan', gemma: 'Gemma',
+            anya: 'Anya', libby: 'Libby', lizzie: 'Lizzie', ciara: 'Ciara',
+            harriet: 'Harriet', hannah: 'Hannah', zach: 'Zach', jordy: 'Jordy'
+        };
+
+        const letterContents = {
+            caitlin: { image: 'https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=400', message: "Caitlin thân mến,\n\nDù chúng ta cách xa nhau hàng ngàn dặm, hơi ấm tình bạn vẫn luôn ở đây. Chúc cậu một mùa Giáng sinh lấp lánh!" },
+            sophie: { image: 'https://images.unsplash.com/photo-1544273677-242522277555?w=400', message: "Sophie ơi,\n\nTớ hy vọng bưu thiếp này sẽ mang theo một chút tuyết trắng và thật nhiều niềm vui đến với cậu!" },
+            dan: { image: 'https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=400', message: "Chào Dan,\n\nGiáng sinh không chỉ là quà cáp, mà là việc nhớ về những người bạn tuyệt vời. Chúc ông thật chill nhé!" },
+            gemma: { image: 'https://images.unsplash.com/photo-1513297844881-450f750c1f6b?w=400', message: "Gemma thân yêu,\n\nChúc cậu một năm mới rực rỡ và một đêm Noel tràn đầy tiếng cười. Cảm ơn vì tất cả!" },
+            anya: { image: 'https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=400', message: "Anya thân mến,\n\nChúc cậu một mùa Giáng sinh rạng rỡ và tràn ngập niềm vui bên gia đình. Mong mọi điều ước của cậu thành hiện thực!" },
+            libby: { image: 'https://images.unsplash.com/photo-1544273677-242522277555?w=400', message: "Libby ơi,\n\nMong rằng mùa lễ này sẽ mang đến cho cậu thật nhiều kỷ niệm đẹp và những món quà bất ngờ!" },
+            lizzie: { image: 'https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=400', message: "Gửi Lizzie,\n\nChúc cậu một đêm Noel ấm áp, an lành và luôn giữ được nụ cười tươi tắn trên môi nhé!" },
+            ciara: { image: 'https://images.unsplash.com/photo-1513297844881-450f750c1f6b?w=400', message: "Ciara thân yêu,\n\nHy vọng cậu sẽ có một kỳ nghỉ thật tuyệt vời và bắt đầu một năm mới đầy hứng khởi. Thương gửi cậu nhiều cái ôm!" },
+            harriet: { image: 'https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=400', message: "Harriet à,\n\nChúc cậu một mùa Giáng sinh kỳ diệu như những câu chuyện cổ tích. Cảm ơn cậu vì đã luôn ở đó!" },
+            hannah: { image: 'https://images.unsplash.com/photo-1544273677-242522277555?w=400', message: "Hannah thân mến,\n\nCảm ơn vì đã luôn đồng hành cùng tớ. Chúc cậu một mùa đông không lạnh và một năm mới thật bùng nổ!" },
+            zach: { image: 'https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=400', message: "Chào Zach,\n\nChúc ông một mùa lễ hội cực cháy, đầy ắp đồ ăn ngon và những giây phút thư giãn tuyệt vời bên bạn bè nhé!" },
+            jordy: { image: 'https://images.unsplash.com/photo-1513297844881-450f750c1f6b?w=400', message: "Jordy ơi,\n\nChúc cậu một mùa Giáng sinh ấm áp và một năm mới gặt hái được thật nhiều thành công. Hẹn sớm gặp lại!" }
+        };
 
         let currentRecipient = '';
+        const music = document.getElementById('christmas-music');
 
-        let recipientNamesMap = {
-            caitlin: 'Caitlin',
-            sophie: 'Sophie',
-            dan: 'Dan',
-            gemma: 'Gemma'
-        };
-
-        // --- LETTER CONTENTS ---
-        const letterContents = {
-            caitlin: {
-                image: 'WILL1.jpg',
-                title: "Dành tặng Caitlin thân yêu",
-                message: "Caitlin à, Giáng Sinh này, dù xa cách, tớ vẫn luôn nhớ đến những kỷ niệm vui vẻ của chúng ta. Chúc cậu một mùa lễ hội ấm áp, an lành và hạnh phúc. Hy vọng chúng ta sẽ sớm gặp lại nhau!",
-                signOff: "Yêu cậu nhiều, [Tên của bạn]"
-            },
-            sophie: {
-                image: 'WILL4.jpg',
-                title: "Một bức thư ngọt ngào cho Sophie",
-                message: "Sophie ơi, Giáng Sinh đến rồi! Tớ gửi lời chúc tốt đẹp nhất đến cậu. Hãy tận hưởng những khoảnh khắc tuyệt vời bên gia đình và bạn bè nhé. Cậu là một người bạn tuyệt vời và tớ rất nhớ cậu! Chúc Mừng Giáng Sinh!",
-                signOff: "Thân mến, [Tên của bạn]"
-            },
-            dan: {
-                image: 'WILL3.jpg',
-                title: "Gửi Dan, người bạn tuyệt vời!",
-                message: "Này Dan, Giáng Sinh là dịp để nhớ về những người bạn như cậu. Hy vọng cậu đang có một khoảng thời gian nghỉ ngơi tuyệt vời. Hãy giữ ấm và có một kỳ nghỉ lễ thật nhiều niềm vui nhé. Nhớ giữ liên lạc nha!",
-                signOff: "Người bạn, [Tên của bạn]"
-            },
-            gemma: {
-                image: 'WILL2.jpg',
-                title: "Gemma, mùa lễ hội rực rỡ nhé!",
-                message: "Gemma thân mến, tớ muốn gửi đến cậu những lời chúc Giáng Sinh ấm áp nhất. Dù không thể ở bên, tớ vẫn luôn nghĩ về cậu. Chúc cậu một năm mới tràn đầy may mắn và thành công. Merry Christmas!",
-                signOff: "Với tất cả tình yêu thương, [Tên của bạn]"
-            }
-        };
-
-
-        // --- API CALL FUNCTION (with exponential backoff) ---
-        async function callGeminiAPI(userQuery, systemPrompt) {
-            if (!apiKey) {
-                console.warn("API Key is missing. Skipping Gemini API call.");
-                return "Lỗi: Chưa cung cấp API Key!";
-            }
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${apiKey}`;
-            const payload = {
-                contents: [{ parts: [{ text: userQuery }] }],
-                systemInstruction: { parts: [{ text: systemPrompt }] },
-            };
-
-            let delay = 1000;
-            const maxRetries = 5;
-
-            for (let i = 0; i < maxRetries; i++) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(payload)
-                    });
-
-                    if (response.ok) {
-                        const result = await response.json();
-                        const text = result.candidates?.[0]?.content?.parts?.[0]?.text;
-                        return text || "Lời nhắn AI không tải được.";
-                    } else if (response.status === 429) {
-                        // Rate limit hit, retry with backoff
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        delay *= 2;
-                        continue;
-                    } else {
-                        console.error(`Gemini API Error: HTTP ${response.status} - ${await response.text()}`);
-                        return "Lỗi tải lời nhắn AI.";
-                    }
-                } catch (error) {
-                    // Network or JSON parsing error
-                    if (i < maxRetries - 1) {
-                        await new Promise(resolve => setTimeout(resolve, delay));
-                        delay *= 2;
-                    } else {
-                        console.error("Gemini API network error after retries:", error);
-                        return "Lỗi kết nối AI.";
-                    }
-                }
-            }
-            return "Đã vượt quá số lần thử kết nối AI.";
-        }
-
-
-        // --- FLOW HANDLERS ---
-
-        // Stage 1 -> Stage 2: Open Cover -> Show Password
         function openCover() {
-            coverStage.classList.add('hidden');
-            passwordStage.classList.remove('hidden');
-            passwordStage.classList.add('flex');
-            passwordInput.focus();
+            // Phát nhạc khi người dùng tương tác
+            music.play().catch(e => console.log("Audio play failed:", e));
+            
+            document.getElementById('merry-christmas-cover').classList.add('hidden');
+            const pwdStage = document.getElementById('password-stage');
+            pwdStage.classList.remove('hidden');
+            pwdStage.classList.add('flex');
         }
 
-        // Stage 2 -> Stage 3: Check Password -> Show Sealed Envelope
         function checkPassword() {
-            const input = passwordInput.value.toLowerCase().trim();
-            errorMessage.classList.add('hidden');
-
-            if (letterContents.hasOwnProperty(input)) {
-                currentRecipient = input;
-                const recipientName = recipientNamesMap[currentRecipient];
-
-                passwordStage.classList.add('hidden');
-                
-                // Hiển thị phong bì cá nhân hóa
-                envelopeRecipientName.textContent = `To: ${recipientName}`;
-                sealedEnvelopeStage.classList.remove('hidden');
-                sealedEnvelopeStage.classList.add('flex', 'animate-fadeIn');
-
-                // Tải lời nhắn AI (Intro) vào bộ nhớ trong lúc người dùng xem phong bì
-                loadIntroMessage(recipientName);
-
+            const val = document.getElementById('password-input').value.toLowerCase().trim();
+            if (letterContents[val]) {
+                currentRecipient = val;
+                document.getElementById('password-stage').classList.replace('flex', 'hidden');
+                document.getElementById('envelope-recipient-name').innerText = "To: " + recipientNamesMap[val];
+                const envStage = document.getElementById('sealed-envelope-stage');
+                envStage.classList.remove('hidden');
+                envStage.classList.add('flex');
+                loadIntroMessage(recipientNamesMap[val]);
             } else {
-                errorMessage.classList.remove('hidden');
-                passwordInput.value = '';
-                passwordInput.focus();
+                document.getElementById('error-message').classList.remove('hidden');
             }
         }
 
-        // Stage 3 -> Stage 4: Open Sealed Envelope -> Show Letter Content
         function openSealedEnvelope() {
-            envelopeFlapReal.classList.add('opened'); // Lật nắp phong bì
+            document.getElementById('envelope-flap').style.transform = 'rotateX(180deg)';
+            const seal = document.getElementById('envelope-seal');
+            seal.style.opacity = '0';
+            seal.style.transform = 'translate(-50%, -150%)';
 
             setTimeout(() => {
-                sealedEnvelopeStage.classList.add('hidden');
-                
-                // Show card stage (Nội dung thư)
-                cardStage.classList.remove('hidden');
-                cardStage.classList.add('flex', 'animate-fadeIn');
-                
-                // Load the personalized content with unfold effect
-                loadLetter(currentRecipient);
-            }, 800); // Đợi cho animation lật nắp phong bì kết thúc
-        }
-        
-        // --- AI & CONTENT LOGIC ---
-
-        let aiIntroText = "Đang tải lời chúc AI..."; // Default loading message
-
-        // 1. Initial Call for Intro Message (runs in background after login)
-        async function loadIntroMessage(recipientName) {
-            const systemPrompt = "Bạn là người gửi thư (Alice). Hãy tạo một lời chúc ngắn gọn, cảm động bằng tiếng Việt để đặt ngay đầu thư. Tối đa 2 câu.";
-            const userQuery = `Viết lời chào Giáng Sinh cho người bạn ${recipientName}.`;
-
-            aiIntroText = await callGeminiAPI(userQuery, systemPrompt);
+                document.getElementById('sealed-envelope-stage').classList.replace('flex', 'hidden');
+                renderPostcard();
+            }, 800);
         }
 
-        // 2. Load Personalized Letter Content
-        function loadLetter(recipient) {
-            const content = letterContents[recipient];
-            const recipientName = recipientNamesMap[recipient];
-            
-            // HTML for the letter
-            const letterHtml = `
-                
-                <!-- Địa chỉ người gửi/nhận (trước đây là trên phong bì) --><p class="text-xl font-extrabold text-christmas-green homemade-font text-left mb-4">
-                    From Alice to: ${recipientName}
-                </p>
-
-                <img src="${content.image}" alt="Ảnh cá nhân của ${recipient}" 
-                     class="w-40 h-40 object-cover rounded-full mx-auto mb-6 shadow-md border-4 border-gold">
-                <h2 class="text-3xl md:text-4xl font-extrabold text-christmas-red mb-6 border-b-2 pb-2 border-gold">
-                    ${content.title}
-                </h2>
-                
-                <!-- This div is the unfold animation --><div class="animate-unfold" style="overflow: hidden;">
-                    
-                    <!-- Lời nhắn AI (Intro) được chèn vào đây --><p class="text-christmas-red text-xl italic mt-6 p-4 mb-4 border-l-4 border-christmas-red animate-fadeIn homemade-font text-center">
-                        ${aiIntroText}
-                    </p>
-
-                    <div class="text-christmas-green text-lg leading-relaxed mb-6 mt-4 text-left homemade-font p-2">
-                        <p class="mb-4 whitespace-pre-wrap">
-                            ${content.message}
-                        </p>
-                        <p class="mt-8 text-right text-xl font-bold text-gold">
-                            ${content.signOff}
-                        </p>
-                    </div>
-                    
-                    <!-- Outro Button Section --><div id="outro-section" class="text-center mt-12 py-4">
-                        <button id="outro-button" onclick="loadOutroMessage()"
-                            class="px-8 py-3 text-lg font-bold bg-christmas-red text-snow-white rounded-full shadow-lg transition-all duration-300 hover:scale-[1.02] active:translate-y-1">
-                            Nhận Lời Chúc Bí Mật
-                        </button>
-                        <p id="ai-outro-message" class="text-christmas-red text-xl italic mt-6 p-4 border-l-4 border-christmas-red hidden animate-fadeIn homemade-font"></p>
-                        <p id="outro-loading" class="text-christmas-red italic mt-6 hidden">Đang tạo lời chúc...</p>
-                    </div>
-                </div>
-            `;
-            
-            personalizedLetter.innerHTML = letterHtml;
-            bow.style.pointerEvents = 'none'; 
-            
-            // Setup scroll listener to show the outro button when user reaches the end
-            cardStage.addEventListener('scroll', checkScrollEnd);
-        }
-
-        // 3. Scroll Check for Outro Button
-        function checkScrollEnd() {
-            const scrollHeight = cardStage.scrollHeight;
-            const scrollTop = cardStage.scrollTop;
-            const clientHeight = cardStage.clientHeight;
-            const outroButton = document.getElementById('outro-button');
-
-            // If scrolled near the bottom (within 100px of the end)
-            if (scrollHeight - scrollTop - clientHeight < 100) {
-                if(outroButton && outroButton.classList.contains('hidden')) {
-                     outroButton.classList.remove('hidden');
-                }
-            } else {
-                if(outroButton && !outroButton.classList.contains('hidden')) {
-                     outroButton.classList.add('hidden');
-                }
+        async function loadIntroMessage(name) {
+            if (!apiKey) {
+                document.getElementById('ai-intro-text').innerText = "Merry Christmas, " + name + "! Chúc bạn một ngày thật tuyệt vời.";
+                return;
+            }
+            try {
+                const prompt = `Bạn là Alice. Hãy viết 1 câu chào Giáng sinh cực ngắn cho người bạn tên ${name}.`;
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                const data = await response.json();
+                document.getElementById('ai-intro-text').innerText = data.candidates[0].content.parts[0].text;
+            } catch (e) {
+                document.getElementById('ai-intro-text').innerText = "Gửi ngàn lời chúc ấm áp tới bạn!";
             }
         }
 
-        // 4. Call for Outro Message
-        async function loadOutroMessage() {
-            const outroButton = document.getElementById('outro-button');
-            const outroLoading = document.getElementById('outro-loading');
-            const outroMessage = document.getElementById('ai-outro-message');
-            
-            if (outroButton.disabled) return; // Prevent double click
-
-            outroButton.disabled = true;
-            outroButton.classList.add('opacity-50');
-            outroLoading.classList.remove('hidden');
-            
-            const recipientName = recipientNamesMap[currentRecipient];
-            const systemPrompt = "Bạn là một người bạn thân. Hãy tạo một lời kết thúc xúc động, sâu lắng và độc đáo cho lá thư Giáng Sinh gửi tới một người bạn thân, tối đa 3 câu, bằng tiếng Việt.";
-            const userQuery = `Viết lời kết cho thư Giáng Sinh gửi tới ${recipientName}.`;
-
-            const message = await callGeminiAPI(userQuery, systemPrompt);
-            
-            outroLoading.classList.add('hidden');
-            outroButton.classList.add('hidden');
-            
-            outroMessage.textContent = message;
-            outroMessage.classList.remove('hidden');
-            
-            // Remove scroll listener after outro is shown
-            cardStage.removeEventListener('scroll', checkScrollEnd);
+        function renderPostcard() {
+            const data = letterContents[currentRecipient];
+            const cardStage = document.getElementById('card-stage');
+            cardStage.classList.remove('hidden');
+            cardStage.classList.add('flex');
+            document.getElementById('recipient-photo').src = data.image;
+            document.getElementById('main-message').innerText = data.message;
+            document.getElementById('addr-name').innerText = recipientNamesMap[currentRecipient];
         }
 
-        // ----------------------------------------------------
-        // --- LOGIC CHO HIỆU ỨNG TUYẾT RƠI (SNOW EFFECT) ---
-        // ----------------------------------------------------
+        async function loadOutroMessage() {
+            const btn = document.getElementById('outro-button');
+            btn.innerText = "Đang xin ông già Noel...";
+            btn.disabled = true;
+
+            if (!apiKey) {
+                document.getElementById('ai-outro-message').innerText = "Hạnh phúc nhé, người bạn tuyệt vời của tớ! ✨";
+                btn.classList.add('hidden');
+                return;
+            }
+
+            try {
+                const prompt = `Viết 1 lời chúc Giáng sinh bí mật, hài hước gửi tới ${recipientNamesMap[currentRecipient]}. Tối đa 2 câu.`;
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${apiKey}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
+                });
+                const data = await response.json();
+                btn.classList.add('hidden');
+                document.getElementById('ai-outro-message').innerText = data.candidates[0].content.parts[0].text;
+            } catch (e) {
+                btn.classList.add('hidden');
+                document.getElementById('ai-outro-message').innerText = "Chúc bạn một mùa đông thật ấm áp!";
+            }
+        }
+
+        // Tuyết rơi
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
-        let snowflakes = [];
-        const maxSnowflakes = 150;
-
-        function setupCanvas() {
+        let flakes = [];
+        function initSnow() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
+            flakes = [];
+            for(let i=0; i<100; i++) flakes.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*3+1, d: Math.random()*1});
         }
-        window.addEventListener('resize', setupCanvas);
-        setupCanvas(); 
-
-        function createSnowflake() {
-            return {
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.random() * 2 + 1,
-                density: Math.random() * 1 + 0.5,
-                speed: Math.random() * 1 + 0.5,
-                wind: (Math.random() - 0.5) * 0.5,
-            };
+        function drawSnow() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            flakes.forEach(f => {
+                ctx.moveTo(f.x, f.y);
+                ctx.arc(f.x, f.y, f.r, 0, Math.PI*2);
+                f.y += Math.cos(f.d) + 1 + f.r/2;
+                f.x += Math.sin(f.d) * 2;
+                if(f.y > canvas.height) { f.y = -10; f.x = Math.random()*canvas.width; }
+            });
+            ctx.fill();
+            requestAnimationFrame(drawSnow);
         }
-
-        for (let i = 0; i < maxSnowflakes; i++) {
-            snowflakes.push(createSnowflake());
-        }
-
-        function drawSnowflakes() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'; 
-
-            for (let i = 0; i < maxSnowflakes; i++) {
-                let s = snowflakes[i];
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-                ctx.fill();
-
-                s.y += s.speed * s.density;
-                s.x += s.wind;
-
-                if (s.y > canvas.height) {
-                    s.y = 0;
-                    s.x = Math.random() * canvas.width;
-                }
-
-                if (s.x > canvas.width) {
-                    s.x = 0;
-                } else if (s.x < 0) {
-                    s.x = canvas.width;
-                }
-            }
-            requestAnimationFrame(drawSnowflakes);
-        }
-
-        // --- INITIALIZATION ---
-        window.onload = function() {
-            drawSnowflakes(); // Start snow immediately
-        };
+        window.addEventListener('resize', initSnow);
+        window.onload = () => { initSnow(); drawSnow(); };
     </script>
 </body>
 </html>
