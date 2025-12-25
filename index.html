@@ -135,7 +135,7 @@
                 </div>
             </div>
             
-            <button onclick="location.reload()" class="mt-10 bg-gold hover:bg-yellow-500 text-christmas-green font-bold px-10 py-4 rounded-full shadow-2xl transition-all transform hover:scale-105 mx-auto block">
+            <button onclick="resetToStart()" class="mt-10 bg-gold hover:bg-yellow-500 text-christmas-green font-bold px-10 py-4 rounded-full shadow-2xl transition-all transform hover:scale-105 mx-auto block">
                 SEND ANOTHER LETTER ✉️
             </button>
         </div>
@@ -177,18 +177,20 @@
         function openCover() {
             playMusic();
             document.getElementById('merry-christmas-cover').style.display = 'none';
-            const stage = document.getElementById('password-stage');
-            stage.style.display = 'flex';
+            document.getElementById('password-stage').style.display = 'flex';
         }
 
         function checkPassword() {
-            const val = document.getElementById('password-input').value.toLowerCase().trim();
+            const inputEl = document.getElementById('password-input');
+            const val = inputEl.value.toLowerCase().trim();
             if (letterContents[val]) {
                 document.getElementById('password-stage').style.display = 'none';
                 document.getElementById('envelope-recipient-name').innerText = "To: " + recipientNamesMap[val];
                 document.getElementById('sealed-envelope-stage').style.display = 'flex';
                 currentRecipient = val;
                 document.getElementById('ai-intro-text').innerText = "Special delivery for " + recipientNamesMap[val] + "...";
+                document.getElementById('error-message').classList.add('hidden');
+                inputEl.value = ""; // Xóa tên đã nhập để lần sau nhập mới
             } else {
                 document.getElementById('error-message').classList.remove('hidden');
             }
@@ -211,6 +213,9 @@
             document.getElementById('recipient-photo').src = data.image;
             document.getElementById('main-message').innerText = data.message;
             document.getElementById('addr-name').innerText = recipientNamesMap[currentRecipient];
+            // Reset secret message button and text
+            document.getElementById('outro-button').style.display = 'inline-block';
+            document.getElementById('ai-outro-message').innerText = "";
         }
 
         function loadOutroMessage() {
@@ -218,6 +223,19 @@
             document.getElementById('ai-outro-message').innerText = "May your heart be light, your season bright, and your year filled with pure delight! ✨❄️";
         }
 
+        function resetToStart() {
+            // Quay về màn hình nhập tên mà không tải lại trang để giữ nhạc
+            document.getElementById('card-stage').style.display = 'none';
+            document.getElementById('password-stage').style.display = 'flex';
+            
+            // Reset phong bì về trạng thái đóng
+            document.getElementById('envelope-flap').style.transform = 'rotateX(0deg)';
+            const seal = document.getElementById('envelope-seal');
+            seal.style.opacity = '1';
+            seal.style.transform = 'translate(-50%, -20%)';
+        }
+
+        // Snow Animation
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
         let flakes = [];
