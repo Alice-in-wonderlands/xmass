@@ -75,9 +75,9 @@
     </style>
 </head>
 
-<body class="bg-christmas-green min-h-screen flex items-center justify-center p-4 overflow-hidden" onclick="playMusic()">
+<body class="bg-christmas-green min-h-screen flex items-center justify-center p-4 overflow-hidden" onclick="startExperience()">
     
-    <audio id="christmas-music" loop autoplay>
+    <audio id="christmas-music" loop>
         <source src="song.mp3" type="audio/mpeg">
     </audio>
 
@@ -101,7 +101,7 @@
             <div class="mt-6 px-6 py-2 bg-gold text-christmas-green font-bold rounded-full transform -rotate-2">
                 FROM ALICE WITH LOVE
             </div>
-            <p class="text-white/70 mt-12 animate-bounce">Nhấn vào đây để nhận thư... ❄️</p>
+            <p class="text-white/70 mt-12 animate-bounce">Nhấn vào đây để mở nhạc và xem thư... ❄️</p>
         </div>
 
         <div id="password-stage" class="hidden flex-col items-center justify-center">
@@ -162,9 +162,6 @@
     </div>
 
     <script>
-        const apiKey = ""; 
-        const API_MODEL = 'gemini-1.5-flash';
-
         const recipientNamesMap = { 
             caitlin: 'Caitlin', sophie: 'Sophie', dan: 'Dan', gemma: 'Gemma',
             anya: 'Anya', libby: 'Libby', lizzie: 'Lizzie', ciara: 'Ciara',
@@ -172,32 +169,34 @@
         };
 
         const letterContents = {
-            caitlin: { image: 'WILL1.jpg', message: "Caitlin thân mến,\n\nDù chúng ta cách xa nhau hàng ngàn dặm, hơi ấm tình bạn vẫn luôn ở đây. Chúc cậu một mùa Giáng sinh lấp lánh!" },
-            sophie: { image: 'WILL4.jpg', message: "Sophie ơi,\n\nTớ hy vọng bưu thiếp này sẽ mang theo một chút tuyết trắng và thật nhiều niềm vui đến với cậu!" },
-            dan: { image: 'WILL3.jpg', message: "Chào Dan,\n\nGiáng sinh không chỉ là quà cáp, mà là việc nhớ về những người bạn tuyệt vời. Chúc ông thật chill nhé!" },
-            gemma: { image: 'WILL2.jpg', message: "Gemma thân yêu,\n\nChúc cậu một năm mới rực rỡ và một đêm Noel tràn đầy tiếng cười. Cảm ơn vì tất cả!" },
-            anya: { image: 'WILL1.jpg', message: "Anya thân mến,\n\nChúc cậu một mùa Giáng sinh rạng rỡ và tràn ngập niềm vui bên gia đình." },
-            libby: { image: 'WILL2.jpg', message: "Libby ơi,\n\nMong rằng mùa lễ này sẽ mang đến cho cậu thật nhiều kỷ niệm đẹp và những món quà bất ngờ!" },
-            lizzie: { image: 'WILL3.jpg', message: "Gửi Lizzie,\n\nChúc cậu một đêm Noel ấm áp, an lành và luôn giữ được nụ cười tươi tắn trên môi nhé!" },
-            ciara: { image: 'WILL4.jpg', message: "Ciara thân yêu,\n\nHy vọng cậu sẽ có một kỳ nghỉ thật tuyệt vời và bắt đầu một năm mới đầy hứng khởi!" },
-            harriet: { image: 'WILL1.jpg', message: "Harriet à,\n\nChúc cậu một mùa Giáng sinh kỳ diệu như những câu chuyện cổ tích. Cảm ơn cậu!" },
-            hannah: { image: 'WILL2.jpg', message: "Hannah thân mến,\n\nCảm ơn vì đã luôn đồng hành cùng tớ. Chúc cậu một năm mới thật bùng nổ!" },
-            zach: { image: 'WILL3.jpg', message: "Chào Zach,\n\nChúc ông một mùa lễ hội cực cháy, đầy ắp đồ ăn ngon và giây phút thư giãn nhé!" },
-            jordy: { image: 'WILL4.jpg', message: "Jordy ơi,\n\nChúc cậu một mùa Giáng sinh ấm áp và một năm mới gặt hái được thật nhiều thành công!" }
+            caitlin: { image: 'WILL1.jpg', message: "Caitlin thân mến,\nDù chúng ta cách xa nhau hàng ngàn dặm, hơi ấm tình bạn vẫn luôn ở đây. Chúc cậu một mùa Giáng sinh lấp lánh!" },
+            sophie: { image: 'WILL4.jpg', message: "Sophie ơi,\nTớ hy vọng bưu thiếp này sẽ mang theo một chút tuyết trắng và thật nhiều niềm vui đến với cậu!" },
+            dan: { image: 'WILL3.jpg', message: "Chào Dan,\nGiáng sinh không chỉ là quà cáp, mà là việc nhớ về những người bạn tuyệt vời. Chúc ông thật chill nhé!" },
+            gemma: { image: 'WILL2.jpg', message: "Gemma thân yêu,\nChúc cậu một năm mới rực rỡ và một đêm Noel tràn đầy tiếng cười. Cảm ơn vì tất cả!" },
+            anya: { image: 'WILL1.jpg', message: "Anya thân mến,\nChúc cậu một mùa Giáng sinh rạng rỡ và tràn ngập niềm vui bên gia đình." },
+            libby: { image: 'WILL2.jpg', message: "Libby ơi,\nMong rằng mùa lễ này sẽ mang đến cho cậu thật nhiều kỷ niệm đẹp và những món quà bất ngờ!" },
+            lizzie: { image: 'WILL3.jpg', message: "Gửi Lizzie,\nChúc cậu một đêm Noel ấm áp, an lành và luôn giữ được nụ cười tươi tắn trên môi nhé!" },
+            ciara: { image: 'WILL4.jpg', message: "Ciara thân yêu,\nHy vọng cậu sẽ có một kỳ nghỉ thật tuyệt vời và bắt đầu một năm mới đầy hứng khởi!" },
+            harriet: { image: 'WILL1.jpg', message: "Harriet à,\nChúc cậu một mùa Giáng sinh kỳ diệu như những câu chuyện cổ tích. Cảm ơn cậu!" },
+            hannah: { image: 'WILL2.jpg', message: "Hannah thân mến,\nCảm ơn vì đã luôn đồng hành cùng tớ. Chúc cậu một năm mới thật bùng nổ!" },
+            zach: { image: 'WILL3.jpg', message: "Chào Zach,\nChúc ông một mùa lễ hội cực cháy, đầy ắp đồ ăn ngon và giây phút thư giãn nhé!" },
+            jordy: { image: 'WILL4.jpg', message: "Jordy ơi,\nChúc cậu một mùa Giáng sinh ấm áp và một năm mới gặt hái được thật nhiều thành công!" }
         };
 
         const music = document.getElementById('christmas-music');
         let musicStarted = false;
 
-        function playMusic() {
+        // Hàm xử lý nhạc bắt đầu từ giây thứ 3
+        function startExperience() {
             if (!musicStarted) {
+                music.currentTime = 3; // <--- THIẾT LẬP NHẢY ĐẾN GIÂY THỨ 3
                 music.play().catch(() => {});
                 musicStarted = true;
             }
         }
 
         function openCover() {
-            playMusic();
+            startExperience();
             document.getElementById('merry-christmas-cover').classList.add('hidden');
             const pwdStage = document.getElementById('password-stage');
             pwdStage.classList.remove('hidden');
@@ -213,7 +212,7 @@
                 envStage.classList.remove('hidden');
                 envStage.classList.add('flex');
                 currentRecipient = val;
-                loadIntroMessage(recipientNamesMap[val]);
+                document.getElementById('ai-intro-text').innerText = "Merry Christmas, " + recipientNamesMap[val] + "!";
             } else {
                 document.getElementById('error-message').classList.remove('hidden');
             }
@@ -239,16 +238,12 @@
             document.getElementById('addr-name').innerText = recipientNamesMap[currentRecipient];
         }
 
-        async function loadIntroMessage(name) {
-            document.getElementById('ai-intro-text').innerText = "Merry Christmas, " + name + "!";
-        }
-
-        async function loadOutroMessage() {
-            const btn = document.getElementById('outro-button');
-            btn.classList.add('hidden');
+        function loadOutroMessage() {
+            document.getElementById('outro-button').classList.add('hidden');
             document.getElementById('ai-outro-message').innerText = "Hạnh phúc nhé, người bạn tuyệt vời của tớ! ✨";
         }
 
+        // Tuyết rơi
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
         let flakes = [];
