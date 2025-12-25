@@ -101,18 +101,18 @@
             <div class="mt-6 px-6 py-2 bg-gold text-christmas-green font-bold rounded-full transform -rotate-2">
                 FROM ALICE WITH LOVE
             </div>
-            <p class="text-white/70 mt-12 animate-bounce">Nhấn vào đây để nhận thư... ❄️</p>
+            <p class="text-white/70 mt-12 animate-bounce">Click here to receive your letter... ❄️</p>
         </div>
 
         <div id="password-stage" class="hidden flex-col items-center justify-center">
             <div class="bg-white/95 backdrop-blur p-10 rounded-2xl shadow-2xl w-full max-w-sm border-t-8 border-christmas-red">
-                <h2 class="text-3xl font-festive font-bold text-christmas-red text-center mb-6">Xác nhận danh tính</h2>
-                <input type="text" id="password-input" placeholder="Tên của bạn là..." 
+                <h2 class="text-3xl font-festive font-bold text-christmas-red text-center mb-6">Identity Verification</h2>
+                <input type="text" id="password-input" placeholder="Enter your name..." 
                        class="w-full p-4 border-2 border-gold/30 rounded-xl focus:outline-none focus:border-christmas-red text-center text-lg mb-6">
                 <button onclick="checkPassword()" class="w-full py-4 bg-christmas-red text-white font-bold rounded-xl hover:bg-red-700 transition-colors">
-                    MỞ QUÀ 🎁
+                    OPEN GIFT 🎁
                 </button>
-                <p id="error-message" class="text-red-600 mt-4 text-center hidden">Bạn không có trong danh sách nhận thư rồi!</p>
+                <p id="error-message" class="text-red-600 mt-4 text-center hidden">You are not on the recipient list!</p>
             </div>
         </div>
 
@@ -129,7 +129,7 @@
                     <p id="envelope-recipient-name" class="text-gold font-handwriting text-2xl drop-shadow-sm"></p>
                 </div>
             </div>
-            <p class="text-white mt-6 font-festive text-xl">Chạm vào phong bì để xé tem...</p>
+            <p class="text-white mt-6 font-festive text-xl">Tap the envelope to break the seal...</p>
         </div>
 
         <div id="card-stage" class="hidden flex-col">
@@ -151,13 +151,13 @@
                     </div>
                     <div class="mt-auto pt-8">
                         <button id="outro-button" onclick="loadOutroMessage()" class="bg-christmas-green text-white px-6 py-2 rounded-full text-sm hover:bg-green-800 transition-colors">
-                             Mở lời chúc bí mật ✨
+                             Open secret message ✨
                         </button>
                         <p id="ai-outro-message" class="text-sm text-christmas-red mt-4 italic max-w-[250px] text-right"></p>
                     </div>
                 </div>
             </div>
-            <button onclick="location.reload()" class="mt-8 text-white/50 hover:text-white mx-auto underline">Gửi thư khác</button>
+            <button onclick="location.reload()" class="mt-8 text-white/50 hover:text-white mx-auto underline">Send another letter</button>
         </div>
     </div>
 
@@ -172,18 +172,18 @@
         };
 
         const letterContents = {
-            caitlin: { image: 'WILL1.jpg', message: "Caitlin thân mến,\n\nDù chúng ta cách xa nhau hàng ngàn dặm, hơi ấm tình bạn vẫn luôn ở đây. Chúc cậu một mùa Giáng sinh lấp lánh!" },
-            sophie: { image: 'WILL4.jpg', message: "Sophie ơi,\n\nTớ hy vọng bưu thiếp này sẽ mang theo một chút tuyết trắng và thật nhiều niềm vui đến với cậu!" },
-            dan: { image: 'WILL3.jpg', message: "Chào Dan,\n\nGiáng sinh không chỉ là quà cáp, mà là việc nhớ về những người bạn tuyệt vời. Chúc ông thật chill nhé!" },
-            gemma: { image: 'WILL2.jpg', message: "Gemma thân yêu,\n\nMerry Christmas, Gemma. Thank you for always supporting, caring for, and looking out for me over the past year — I’m truly grateful for everything you’ve done. Wishing you a peaceful, happy Christmas filled with laughter, good food, and lovely moments with Simon and, of course, Bruce 🐶 Warmest wishes for the New Year ahead." },
-            anya: { image: 'WILL1.jpg', message: "Anya thân mến,\n\nChúc cậu một mùa Giáng sinh rạng rỡ và tràn ngập niềm vui bên gia đình." },
-            libby: { image: 'WILL2.jpg', message: "Libby ơi,\n\nMong rằng mùa lễ này sẽ mang đến cho cậu thật nhiều kỷ niệm đẹp và những món quà bất ngờ!" },
-            lizzie: { image: 'WILL3.jpg', message: "Gửi Lizzie,\n\nChúc cậu một đêm Noel ấm áp, an lành và luôn giữ được nụ cười tươi tắn trên môi nhé!" },
-            ciara: { image: 'WILL4.jpg', message: "Ciara thân yêu,\n\nHy vọng cậu sẽ có một kỳ nghỉ thật tuyệt vời và bắt đầu một năm mới đầy hứng khởi!" },
-            harriet: { image: 'WILL1.jpg', message: "Harriet à,\n\nChúc cậu một mùa Giáng sinh kỳ diệu như những câu chuyện cổ tích. Cảm ơn cậu!" },
-            hannah: { image: 'WILL2.jpg', message: "Hannah thân mến,\n\nCảm ơn vì đã luôn đồng hành cùng tớ. Chúc cậu một năm mới thật bùng nổ!" },
-            zach: { image: 'WILL3.jpg', message: "Chào Zach,\n\nChúc ông một mùa lễ hội cực cháy, đầy ắp đồ ăn ngon và giây phút thư giãn nhé!" },
-            jordy: { image: 'WILL4.jpg', message: "Jordy ơi,\n\nChúc cậu một mùa Giáng sinh ấm áp và một năm mới gặt hái được thật nhiều thành công!" }
+            caitlin: { image: 'WILL1.jpg', message: "Dear Caitlin,\n\nEven though we are thousands of miles apart, the warmth of friendship is always here. Wishing you a sparkling Christmas!" },
+            sophie: { image: 'WILL4.jpg', message: "Hi Sophie,\n\nI hope this postcard brings a little white snow and lots of joy to you!" },
+            dan: { image: 'WILL3.jpg', message: "Hello Dan,\n\nChristmas isn't just about presents, it's about remembering great friends. Stay chill, my friend!" },
+            gemma: { image: 'WILL2.jpg', message: "Dear Gemma,\n\nMerry Christmas, Gemma. Thank you for always supporting, caring for, and looking out for me over the past year — I’m truly grateful for everything you’ve done. Wishing you a peaceful, happy Christmas filled with laughter, good food, and lovely moments with Simon and, of course, Bruce 🐶 Warmest wishes for the New Year ahead." },
+            anya: { image: 'WILL1.jpg', message: "Dear Anya,\n\nWishing you a radiant Christmas filled with joy and happiness with your family." },
+            libby: { image: 'WILL2.jpg', message: "Hi Libby,\n\nI hope this holiday season brings you many beautiful memories and wonderful surprise gifts!" },
+            lizzie: { image: 'WILL3.jpg', message: "To Lizzie,\n\nWishing you a warm, peaceful Christmas Eve and may you always keep that bright smile on your face!" },
+            ciara: { image: 'WILL4.jpg', message: "Dear Ciara,\n\nHope you have a wonderful holiday and a very exciting start to the New Year!" },
+            harriet: { image: 'WILL1.jpg', message: "Hi Harriet,\n\nWishing you a Christmas as magical as a fairy tale. Thank you for everything!" },
+            hannah: { image: 'WILL2.jpg', message: "Dear Hannah,\n\nThank you for always being by my side. Wishing you a blast of a New Year!" },
+            zach: { image: 'WILL3.jpg', message: "Hi Zach,\n\nWishing you a lit holiday season, full of delicious food and relaxing moments!" },
+            jordy: { image: 'WILL4.jpg', message: "Hi Jordy,\n\nWishing you a warm Christmas and a New Year full of success and achievements!" }
         };
 
         const music = document.getElementById('christmas-music');
@@ -246,7 +246,7 @@
         async function loadOutroMessage() {
             const btn = document.getElementById('outro-button');
             btn.classList.add('hidden');
-            document.getElementById('ai-outro-message').innerText = "Hạnh phúc nhé, người bạn tuyệt vời của tớ! ✨";
+            document.getElementById('ai-outro-message').innerText = "Stay happy, my wonderful friend! ✨";
         }
 
         const canvas = document.getElementById('snow-canvas');
